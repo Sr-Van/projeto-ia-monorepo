@@ -27,7 +27,7 @@ rules = """
   Critérios PRODUTIVO: Contém solicitações de ação, prazos, entregas de arquivos, negociações ou agendamentos.
   Critérios NAO_PRODUTIVO: Apenas cumprimentos, comentários sociais, newsletters ou avisos genéricos sem ação necessária.
   """
-def classify_emails(text):
+def classify_emails(text: str) -> dict:
   response = client.models.generate_content(
       model="gemini-3-flash-preview",
 
@@ -50,6 +50,7 @@ def classify_emails(text):
   )
   result = json.loads(response.text)
   print(result)
+  return result
 
 
 for text in texts:
