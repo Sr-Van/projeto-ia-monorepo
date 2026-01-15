@@ -1,3 +1,13 @@
-from openai import OpenAI
+from google import genai
+import os
+from dotenv import load_dotenv
 
-openai = OpenAI()
+load_dotenv()
+
+api_key = os.getenv('API_KEY')
+client = genai.Client(api_key=api_key)
+
+response = client.models.generate_content(
+    model="gemini-3-flash-preview", contents="Explain how AI works in a few words"
+)
+print(response.text)
