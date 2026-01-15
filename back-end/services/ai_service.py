@@ -51,7 +51,3 @@ def classify_emails(text: str) -> dict:
   result = json.loads(response.text)
   print(result)
   return result
-
-
-for text in texts:
-  classify_emails(text)
