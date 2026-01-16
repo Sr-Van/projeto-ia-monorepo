@@ -15,7 +15,7 @@ def analyze_email():
   result = classify_emails(email)
   return jsonify(result), 200
 
-@app.route('/analyze/pdf', methods=['POST'])
+@app.route('/analyze/doc', methods=['POST'])
 def analyze_email_pdf():
   if 'file' not in request.files:
     return jsonify({'error': 'Nenhum arquivo enviado'}), 400
@@ -30,6 +30,11 @@ def analyze_email_pdf():
      text = extract_text_from_pdf(file.stream)
      result = classify_emails(text)
      return jsonify(result), 200
+  
+  if file and file.filename.endswith('.txt'):
+    text = file.read().decode('utf-8')
+    result = classify_emails(text)
+    return jsonify(result), 200
 
   return jsonify({'error': 'Formato de arquivo inválido'}), 400
 
