@@ -1,7 +1,10 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from services.ai_service import classify_emails
 from services.data_service import is_pdf_long, extract_text_from_pdf
+
 app = Flask(__name__)
+CORS(app)
 
 
 @app.route('/analyze', methods=['POST'])
