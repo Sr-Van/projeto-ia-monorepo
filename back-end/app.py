@@ -3,10 +3,6 @@ from services.ai_service import classify_emails
 from services.data_service import is_pdf_long, extract_text_from_pdf
 app = Flask(__name__)
 
-#Primeira rota apenas para teste
-@app.route('/teste', methods=['GET'])
-def hello_world():
-  return jsonify({'message': 'Hello, World!'}), 200
 
 @app.route('/analyze', methods=['POST'])
 def analyze_email():
