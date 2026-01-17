@@ -2,6 +2,11 @@ const templateEmail = document.querySelector("#template-email");
 const templateFile = document.querySelector("#template-file");
 const contTemplate = document.querySelector("#container-template");
 const formElement = document.querySelector("#form-email");
+const buttonsHeader = document.querySelector("#buttons-header");
+const btnEmail = document.querySelector("#button-email");
+const btnFile = document.querySelector("#button-file");
+const btnVoltar = document.querySelector("#button-voltar");
+const loadingIcon = document.getElementById("loading-icon");
 
 // deixando a api publica pois vou limitar as requisicoes e colocar o deploy na whitelist no back-end
 const api_url = "https://back-igl23m2j6-srvans-projects.vercel.app/analyze";
@@ -30,19 +35,42 @@ const handleInputChange = (e) => {
   fileSelected.append(span);
 };
 
-document.getElementById("button-email").addEventListener("click", () => {
+btnEmail.addEventListener("click", (e) => {
+  if (e.target.tagName !== "BUTTON") return;
   const cloneEmail = templateEmail.content.cloneNode(true);
   contTemplate.innerHTML = "";
   contTemplate.append(cloneEmail);
+  buttonsHeader.classList.add("h-0", "opacity-0");
+  setTimeout(() => {
+    buttonsHeader.classList.add("hidden");
+    btnVoltar.classList.remove("hidden");
+  }, 350);
   formElement.classList.remove("hidden");
 });
 
-document.getElementById("button-file").addEventListener("click", () => {
+btnFile.addEventListener("click", (e) => {
+  if (e.target.tagName !== "BUTTON") return;
   const cloneFile = templateFile.content.cloneNode(true);
   contTemplate.innerHTML = "";
   contTemplate.append(cloneFile);
 
+  buttonsHeader.classList.add("h-0", "opacity-0");
+  setTimeout(() => {
+    buttonsHeader.classList.add("hidden");
+    btnVoltar.classList.remove("hidden");
+  }, 350);
+
   formElement.classList.remove("hidden");
+});
+
+document.getElementById("button-voltar").addEventListener("click", (e) => {
+  if (e.target.tagName !== "BUTTON") return;
+  e.target.classList.add("hidden");
+  buttonsHeader.classList.remove("hidden");
+  setTimeout(() => {
+    buttonsHeader.classList.remove("h-0", "opacity-0");
+  }, 350);
+  formElement.classList.add("hidden");
 });
 const handleSubtmit = (e, form) => {
   e.preventDefault();
@@ -63,14 +91,19 @@ const handleSubtmit = (e, form) => {
 
 const send_file = async (formData) => {
   console.log(formData);
+  loadingIcon.classList.remove("hidden");
   try {
     const response = await fetch(api_url + "/doc", {
       method: "POST",
       body: formData,
     });
-    const data = await response.json();
+    const data = await response.json().then((data) => {
+      loadingIcon.classList.add("hidden");
+      return data;
+    });
     console.log(data);
   } catch (error) {
+    loadingIcon.classList.add("hidden");
     console.log(error);
   }
 };
