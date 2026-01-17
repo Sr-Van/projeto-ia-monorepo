@@ -4,9 +4,13 @@ const contTemplate = document.querySelector("#container-template");
 
 const cloneEmail = templateEmail.content.cloneNode(true);
 const cloneFile = templateFile.content.cloneNode(true);
+
 // dando append so para verificar o layout do template
 contTemplate.append(cloneEmail);
-contTemplate.append(cloneFile);
+//contTemplate.append(cloneFile);
+
+// deixando a api publica pois vou limitar as requisicoes e colocar o deploy na whitelist no back-end
+const api_url = "https://back-igl23m2j6-srvans-projects.vercel.app/analyze";
 const handleInputChange = (e) => {
   const file = e.target.files[0];
   const fileSelected = document.querySelector(".file-selected");
@@ -30,4 +34,52 @@ const handleInputChange = (e) => {
 
   span.textContent = `Arquivo selecionado: ${file.name}`;
   fileSelected.append(span);
+};
+
+const handleSubtmit = (e, form) => {
+  e.preventDefault();
+  const formData = new FormData(form);
+  const fileField = formData.get("file");
+
+  if (fileField && fileField.name !== "") {
+    send_file(formData);
+    return;
+  } else {
+    const email = formData.get("email_text");
+    send_email(email);
+    return;
+  }
+
+  // TODO: adicionar notificacao de erro por clicar sem enviar nada!
+};
+
+const send_file = async (formData) => {
+  console.log(formData);
+  try {
+    const response = await fetch(api_url + "/doc", {
+      method: "POST",
+      body: formData,
+    });
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const send_email = async (texto) => {
+  // TODO: inserir logica de preenchimento baseado na resposta recebida, nas duas funcoes
+  try {
+    const response = await fetch(api_url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: texto }),
+    });
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.log(error);
+  }
 };
