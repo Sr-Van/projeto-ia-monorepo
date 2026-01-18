@@ -11,6 +11,7 @@ const loadingIcon = document.getElementById("loading-icon");
 const listResponseElement = document.getElementById("list-response");
 
 // deixando a api publica pois vou limitar as requisicoes e colocar o deploy na whitelist no back-end
+// para rodar localmente, utilize a url http://localhost:8000/analyze no lugar desta
 const api_url = "https://back-end-iota-six.vercel.app/analyze";
 let responseList = [];
 const handleInputChange = (e) => {

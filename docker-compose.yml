@@ -10,3 +10,11 @@ services:
       - ./back-end:/app
     environment:
       - FLASK_ENV=development
+
+  frontend:
+      image: nginx:alpine
+      container_name: web_frontend
+      ports:
+        - "3000:80"
+      volumes:
+        - ./front-end:/usr/share/nginx/html
