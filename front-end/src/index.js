@@ -38,43 +38,30 @@ const handleInputChange = (e) => {
   fileSelected.append(span);
 };
 
-btnEmail.addEventListener("click", (e) => {
-  if (e.target.tagName !== "BUTTON") return;
-  const cloneEmail = templateEmail.content.cloneNode(true);
-  contTemplate.innerHTML = "";
-  contTemplate.append(cloneEmail);
-  buttonsHeader.classList.add("h-0", "opacity-0");
-  setTimeout(() => {
-    buttonsHeader.classList.add("hidden");
-    btnVoltar.classList.remove("hidden");
-  }, 350);
-  formElement.classList.remove("hidden");
-});
+const toggleView = (showForm, template = null) => {
+  if (showForm && template) {
+    const clone = template.content.cloneNode(true);
+    contTemplate.replaceChildren(clone);
 
-btnFile.addEventListener("click", (e) => {
-  if (e.target.tagName !== "BUTTON") return;
-  const cloneFile = templateFile.content.cloneNode(true);
-  contTemplate.innerHTML = "";
-  contTemplate.append(cloneFile);
+    buttonsHeader.classList.add("h-0", "opacity-0");
+    setTimeout(() => {
+      buttonsHeader.classList.add("hidden");
+      btnVoltar.classList.remove("hidden");
+    }, 350);
+    formElement.classList.remove("hidden");
+  } else {
+    btnVoltar.classList.add("hidden");
+    buttonsHeader.classList.remove("hidden");
+    setTimeout(() => {
+      buttonsHeader.classList.remove("h-0", "opacity-0");
+    }, 100);
+    formElement.classList.add("hidden");
+  }
+};
 
-  buttonsHeader.classList.add("h-0", "opacity-0");
-  setTimeout(() => {
-    buttonsHeader.classList.add("hidden");
-    btnVoltar.classList.remove("hidden");
-  }, 350);
-
-  formElement.classList.remove("hidden");
-});
-
-document.getElementById("button-voltar").addEventListener("click", (e) => {
-  if (e.target.tagName !== "BUTTON") return;
-  e.target.classList.add("hidden");
-  buttonsHeader.classList.remove("hidden");
-  setTimeout(() => {
-    buttonsHeader.classList.remove("h-0", "opacity-0");
-  }, 350);
-  formElement.classList.add("hidden");
-});
+btnEmail.addEventListener("click", () => toggleView(true, templateEmail));
+btnFile.addEventListener("click", () => toggleView(true, templateFile));
+btnVoltar.addEventListener("click", () => toggleView(false));
 const handleSubtmit = (e, form) => {
   e.preventDefault();
   const formData = new FormData(form);
