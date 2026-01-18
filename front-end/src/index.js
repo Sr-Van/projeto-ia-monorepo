@@ -93,6 +93,7 @@ const send_file = async (formData) => {
     });
     renderResponse(data);
   } catch (error) {
+    showToast("Ocorreu um erro ao enviar o e-mail", "error");
     console.log(error);
   }
   loadingIcon.classList.add("hidden");
@@ -113,6 +114,7 @@ const send_email = async (texto) => {
     const data = await response.json().then((data) => data);
     renderResponse(data);
   } catch (error) {
+    showToast("Ocorreu um erro ao enviar o e-mail", "error");
     console.log(error);
   }
   loadingIcon.classList.add("hidden");
@@ -211,3 +213,37 @@ const generateCell = (isProd, response) => {
 
   return containerPrincipal;
 };
+
+// o toast é pra tratamento de erro no front, exibir a mensagem baseada em cada código HTTP recebido na resposta. Mas por agora, vai ser só ocasional e simples
+const showToast = (message, type = "success") => {
+  const container = document.getElementById("toast-container");
+  const template = document.getElementById("template-toast");
+  const clone = template.content.cloneNode(true);
+
+  const toastDiv = clone.querySelector("div");
+  const textSpan = clone.querySelector(".msg-text");
+  const closeBtn = clone.querySelector("button");
+
+  textSpan.textContent = message;
+  const borderColor =
+    type === "success" ? "border-green-500" : "border-red-500";
+  toastDiv.classList.add(borderColor);
+
+  container.appendChild(toastDiv);
+
+  setTimeout(() => {
+    toastDiv.classList.remove("translate-y-10", "opacity-0");
+  }, 10);
+
+  const removeToast = () => {
+    toastDiv.classList.add("opacity-0");
+    setTimeout(() => toastDiv.remove(), 300);
+  };
+
+  closeBtn.onclick = removeToast;
+  setTimeout(removeToast, 3000);
+};
+
+setTimeout(() => {
+  showToast("Bem-vindo ao Analisador de Texto!", "success");
+}, 2000);
